@@ -1,8 +1,6 @@
 # Shortly — Smarter Links 🔗
 
-A production-ready, full-stack URL shortener with real-time analytics, custom aliases, QR code generation, and link expiry.
-
-![Shortly Banner](https://via.placeholder.com/900x300/f97316/ffffff?text=Shortly+%E2%80%94+Smarter+Links)
+A full-stack URL shortener with real-time analytics, custom aliases, QR code generation, and link expiry.
 
 ---
 
@@ -95,7 +93,7 @@ cd ../client && npm install
 
 ```bash
 cd server
-cp .env.example .env
+cp .env
 ```
 
 Edit `server/.env`:
@@ -119,7 +117,7 @@ RATE_LIMIT_MAX=100
 
 ```bash
 cd client
-cp .env.example .env
+cp .env
 ```
 
 Edit `client/.env`:
@@ -144,182 +142,6 @@ Open **http://localhost:5173** in your browser. 🎉
 
 ---
 
-## 📡 API Documentation
-
-### Base URL
-```
-http://localhost:5000/api
-```
-
----
-
-### `POST /api/shorten`
-Create a new short URL.
-
-**Request Body:**
-```json
-{
-  "url": "https://example.com/very/long/path",
-  "alias": "my-link",        // optional, 3–30 chars
-  "expiresAt": "2025-12-31"  // optional, ISO date string
-}
-```
-
-**Success Response `201`:**
-```json
-{
-  "success": true,
-  "data": {
-    "id": "65abc...",
-    "originalUrl": "https://example.com/very/long/path",
-    "shortCode": "aBc3xZ",
-    "shortUrl": "http://localhost:5000/aBc3xZ",
-    "alias": "my-link",
-    "expiresAt": "2025-12-31T00:00:00.000Z",
-    "qrCode": "data:image/png;base64,...",
-    "createdAt": "2024-01-15T10:30:00.000Z"
-  }
-}
-```
-
-**Error Responses:**
-| Status | Cause |
-|---|---|
-| 400 | Invalid URL, invalid alias format |
-| 409 | Alias already taken |
-| 429 | Rate limit exceeded |
-
----
-
-### `GET /:code`
-Redirect to the original URL.
-
-**Behavior:**
-- Returns `301` redirect on success
-- Returns `404` if code not found
-- Returns `410 Gone` if link has expired
-
----
-
-### `GET /api/stats/:code`
-Get analytics for a short URL.
-
-**Success Response `200`:**
-```json
-{
-  "success": true,
-  "data": {
-    "originalUrl": "https://example.com/...",
-    "shortCode": "aBc3xZ",
-    "shortUrl": "http://localhost:5000/aBc3xZ",
-    "totalClicks": 142,
-    "isExpired": false,
-    "expiresAt": null,
-    "createdAt": "2024-01-15T10:30:00.000Z",
-    "qrCode": "data:image/png;base64,...",
-    "clicksByDay": {
-      "2024-01-15": 12,
-      "2024-01-16": 30
-    },
-    "clicksByCountry": {
-      "US": 80,
-      "IN": 42,
-      "GB": 20
-    },
-    "recentClicks": [
-      {
-        "timestamp": "2024-01-16T08:20:00.000Z",
-        "country": "US",
-        "city": "New York",
-        "referrer": "https://twitter.com"
-      }
-    ]
-  }
-}
-```
-
----
-
-### `GET /api/urls`
-List all active short URLs (paginated).
-
-**Query Params:** `?page=1&limit=10`
-
-**Success Response `200`:**
-```json
-{
-  "success": true,
-  "data": [...],
-  "pagination": {
-    "page": 1,
-    "limit": 10,
-    "total": 42,
-    "pages": 5
-  }
-}
-```
-
----
-
-### `DELETE /api/urls/:code`
-Deactivate a short URL (soft delete).
-
-**Success Response `200`:**
-```json
-{ "success": true, "message": "URL deactivated" }
-```
-
----
-
-### `GET /api/health`
-Health check endpoint.
-
-```json
-{ "success": true, "status": "ok", "timestamp": "2024-01-15T10:30:00.000Z" }
-```
-
----
-
-## 🌐 Deployment Guide
-
-### Frontend → Vercel
-
-1. Push your code to GitHub
-2. Go to [vercel.com](https://vercel.com) → **New Project**
-3. Import your `shortly` repo
-4. Set **Root Directory** to `client`
-5. Set **Framework Preset** to `Vite`
-6. Add environment variable:
-   ```
-   VITE_API_URL = https://your-render-app.onrender.com
-   ```
-7. Click **Deploy** ✅
-
----
-
-### Backend → Render
-
-1. Go to [render.com](https://render.com) → **New Web Service**
-2. Connect your GitHub repo
-3. Set **Root Directory** to `server`
-4. Set:
-   - **Build Command:** `npm install`
-   - **Start Command:** `node index.js`
-5. Add environment variables:
-
-| Key | Value |
-|---|---|
-| `NODE_ENV` | `production` |
-| `PORT` | `10000` |
-| `MONGODB_URI` | `mongodb+srv://...` (from Atlas) |
-| `BASE_URL` | `https://your-app.onrender.com` |
-| `CLIENT_URL` | `https://your-app.vercel.app` |
-| `REDIS_URL` | *(optional)* |
-
-6. Click **Create Web Service** ✅
-
----
-
 ### Database → MongoDB Atlas
 
 1. Go to [mongodb.com/atlas](https://mongodb.com/atlas) → **Create Free Cluster**
@@ -327,26 +149,6 @@ Health check endpoint.
 3. Add your IP to the IP Allowlist (or `0.0.0.0/0` for all)
 4. Click **Connect** → **Connect your application**
 5. Copy the connection string and paste into `MONGODB_URI`
-
----
-
-## 📤 GitHub Push Instructions
-
-```bash
-# 1. Initialize git (if not already)
-git init
-
-# 2. Add all files
-git add .
-
-# 3. Commit
-git commit -m "feat: initial Shortly project"
-
-# 4. Create repo on GitHub (github.com/new), then:
-git remote add origin https://github.com/YOUR_USERNAME/shortly.git
-git branch -M main
-git push -u origin main
-```
 
 ---
 

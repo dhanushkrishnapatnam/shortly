@@ -1,0 +1,22 @@
+services:
+  - type: web
+    name: shortly-api
+    env: node
+    region: oregon
+    plan: free
+    buildCommand: npm install
+    startCommand: node index.js
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: MONGODB_URI
+        sync: false
+      - key: BASE_URL
+        sync: false
+      - key: CLIENT_URL
+        sync: false
+      - key: REDIS_URL
+        sync: false

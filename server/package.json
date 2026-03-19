@@ -23,7 +23,7 @@
     "winston": "^3.11.0",
     "qrcode": "^1.5.3",
     "redis": "^4.6.10",
-    "useragent": "^2.4.5"
+    "useragent": "^2.3.0"
   },
   "devDependencies": {
     "nodemon": "^3.0.1"

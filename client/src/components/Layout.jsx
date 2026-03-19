@@ -89,7 +89,7 @@ export default function Layout() {
         style={{ borderColor: "var(--border)", color: "var(--text-muted)" }}
       >
         <p>
-          Built with ♥ by Shortly &nbsp;·&nbsp;{" "}
+          Built with ♥ by Dhanush &nbsp;·&nbsp;{" "}
           <a
             href="https://github.com"
             target="_blank"
